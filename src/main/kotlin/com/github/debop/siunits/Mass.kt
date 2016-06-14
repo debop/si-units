@@ -5,6 +5,11 @@ package com.github.debop.siunits
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 
+const val MILLIGRAM_IN_GRAM: Double = 1.0 / 1000.0
+const val GRAM_IN_GRAM: Double = 1.0
+const val KILOGRAM_IN_GRAM: Double = 1000.0
+const val TON_IN_GRAM: Double = 1000.0 * 1000.0
+
 fun Int.milligram(): Mass = Mass.of(this.toDouble(), MassUnit.MILLIGRAM)
 fun Int.gram(): Mass = Mass.of(this.toDouble(), MassUnit.GRAM)
 fun Int.kilogram(): Mass = Mass.of(this.toDouble(), MassUnit.KILOGRAM)
@@ -14,11 +19,6 @@ fun Double.milligram(): Mass = Mass.of(this, MassUnit.MILLIGRAM)
 fun Double.gram(): Mass = Mass.of(this, MassUnit.GRAM)
 fun Double.kilogram(): Mass = Mass.of(this, MassUnit.KILOGRAM)
 fun Double.ton(): Mass = Mass.of(this, MassUnit.TON)
-
-const val MILLIGRAM_IN_GRAM: Double = 1.0 / 1000.0
-const val GRAM_IN_GRAM: Double = 1.0
-const val KILOGRAM_IN_GRAM: Double = 1000.0
-const val TON_IN_GRAM: Double = 1000.0 * 1000.0
 
 /**
  * 질량/무게 (Mass/Weight) 단위를 표현합니다.
