@@ -18,7 +18,7 @@
     </encoder>
   </appender>
 
-  <logger name="com.github.debop" level="TRACE"/>
+  <logger name="com.github.debop.siunits" level="TRACE"/>
 
   <root level="INFO">
     <appender-ref ref="console"/>

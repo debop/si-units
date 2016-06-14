@@ -49,6 +49,7 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'io.kotlintest:kotlintest:1.2.0'
+    testCompile 'org.assertj:assertj-core:3.4.1'
 }
 
 task wrapper(type: Wrapper) {
