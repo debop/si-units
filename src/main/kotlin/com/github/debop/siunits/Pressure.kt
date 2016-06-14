@@ -73,14 +73,35 @@ enum class PressureUnit(val unitName: String, val factor: Double) {
   /**
    * 수은주 밀리미터(mmHg)는 압력의 단위로 1mmHg는 수은주의 높이가 1mm일 때의 압력이다. 1기압은 약 760mmHg에 해당한다.
    */
-  MMHG("mmHg", 1.0 / 122.322),
+  MMHG("mmHg", 1.0 / 122.322);
+
+  companion object {
+
+    @JvmStatic fun parse(unitStr: String): PressureUnit {
+      var lower = unitStr.toLowerCase()
+      if (lower.endsWith("s"))
+        lower = lower.dropLast(1)
+
+      return PressureUnit.values().find { it.unitName == unitStr }
+          ?: throw NumberFormatException("Unknown Pressure unit. unitStr=$unitStr")
+    }
+  }
 }
 
 
-fun Double.toAtm(): Pressure = Pressure(this * PressureUnit.ATM.factor)
-fun Double.toPascal(): Pressure = Pressure(this * PressureUnit.PASCAL.factor)
-fun Double.toHectoPascal(): Pressure = Pressure(this * PressureUnit.HECTO_PASCAL.factor)
-fun Double.toKiloPascal(): Pressure = Pressure(this * PressureUnit.KILO_PASCAL.factor)
+fun Double.toAtm(): Pressure = Pressure.of(this, PressureUnit.ATM)
+fun Double.toPascal(): Pressure = Pressure.of(this, PressureUnit.PASCAL)
+fun Double.toHectoPascal(): Pressure = Pressure.of(this, PressureUnit.HECTO_PASCAL)
+fun Double.toKiloPascal(): Pressure = Pressure.of(this, PressureUnit.KILO_PASCAL)
+fun Double.toMegaPascal(): Pressure = Pressure.of(this, PressureUnit.MEGA_PASCLA)
+
+fun Double.toBar(): Pressure = Pressure.of(this, PressureUnit.BAR)
+fun Double.toDeciBar(): Pressure = Pressure.of(this, PressureUnit.DECI_BAR)
+fun Double.toMilliBar(): Pressure = Pressure.of(this, PressureUnit.MILLI_BAR)
+
+fun Double.toPsi(): Pressure = Pressure.of(this, PressureUnit.PSI)
+fun Double.toTorr(): Pressure = Pressure.of(this, PressureUnit.TORR)
+fun Double.toMMHg(): Pressure = Pressure.of(this, PressureUnit.MMHG)
 
 /**
  * 압력 (Pressure) 를 나타내는 클래스
@@ -122,12 +143,19 @@ data class Pressure(val pascal: Double = 0.0) : Comparable<Pressure>, Serializab
     val NEGATIVE_INF = Pressure(Double.NEGATIVE_INFINITY)
 
 
-    @JvmStatic fun of(value: Double, unit: PressureUnit): Pressure {
-      TODO()
-    }
+    @JvmStatic fun of(value: Double, unit: PressureUnit): Pressure =
+        Pressure(value * unit.factor)
 
     @JvmStatic fun parse(str: String): Pressure {
-      TODO()
+      if (str.isBlank())
+        return ZERO
+
+      val (p, u) = str.split(" ", limit = 2)
+      try {
+        return of(p.toDouble(), PressureUnit.parse(u))
+      } catch(e: Exception) {
+        throw NumberFormatException("Unknown pressure format. str=$str")
+      }
     }
   }
 

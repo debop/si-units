@@ -38,7 +38,7 @@ enum class MassUnit(val unitName: String, val factor: Double) {
         lower = lower.dropLast(1)
       }
       return MassUnit.values().find { it.unitName == lower }
-             ?: throw NumberFormatException("알 수 없는 MassUnit 문자열입니다. unit=$unitStr")
+          ?: throw NumberFormatException("Unknown Mess unit. unit=$unitStr")
     }
   }
 }
