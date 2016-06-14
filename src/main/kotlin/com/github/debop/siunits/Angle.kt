@@ -16,13 +16,18 @@ fun Double.toDegree(): Double = this * 180.0 / Math.PI
  * 각도 단위 종류
  */
 enum class AngleUnit(val unitName: String) {
+
   Degree("deg"),
   Radian("rad");
 
   companion object {
 
-    @JvmStatic fun parse(str: String): AngleUnit {
-      val lower = str.toLowerCase()
+    @JvmStatic
+    fun parse(str: String): AngleUnit {
+      var lower = str.toLowerCase()
+      if (lower.endsWith("s"))
+        lower = lower.dropLast(1)
+
       return AngleUnit.values().find { it.unitName == lower }
              ?: throw NumberFormatException("Unknwon AngleUnit format. str=$str")
     }
@@ -66,21 +71,28 @@ data class Angle(val degree: Double) : Comparable<Angle>, Serializable {
     val DEGREE_270 = Angle(270.0)
     val DEGREE_360 = Angle(360.0)
 
+    val MAX_VALUE = Angle(Double.MAX_VALUE)
+    val MIN_VALUE = Angle(Double.MIN_VALUE)
     val POSITIVE_INF = Angle(Double.POSITIVE_INFINITY)
     val NEGATIVE_INF = Angle(Double.NEGATIVE_INFINITY)
     val NaN = Angle(Double.NaN)
 
 
-    @JvmStatic fun of(angle: Double, unit: AngleUnit = AngleUnit.Degree): Angle = when (unit) {
+    @JvmStatic
+    fun of(angle: Double, unit: AngleUnit = AngleUnit.Degree): Angle = when (unit) {
       AngleUnit.Degree -> degree(angle)
       AngleUnit.Radian -> radian(angle)
       else             -> throw IllegalArgumentException("Unknown Angle unit. unit=$unit")
     }
 
-    @JvmStatic fun degree(angle: Double) = Angle(angle)
-    @JvmStatic fun radian(angle: Double) = Angle(angle.toDegree())
+    @JvmStatic
+    fun degree(angle: Double) = Angle(angle)
 
-    @JvmStatic fun parse(str: String): Angle {
+    @JvmStatic
+    fun radian(angle: Double) = Angle(angle.toDegree())
+
+    @JvmStatic
+    fun parse(str: String): Angle {
       if (str.isBlank())
         return ZERO
 

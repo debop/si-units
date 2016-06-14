@@ -88,12 +88,6 @@ data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
   fun inExaBytes(): Long = bytes / EXA_FACTOR
 
   override fun compareTo(other: Storage): Int = bytes.compareTo(other.bytes)
-
-  override fun equals(other: Any?): Boolean = other != null &&
-                                              other is Storage &&
-                                              hashCode() == other.hashCode()
-
-  override fun hashCode(): Int = bytes.hashCode()
   override fun toString(): String = "$bytes.${StorageUnit.BYTE.unitName}"
 
   fun toHuman(): String {
@@ -114,10 +108,12 @@ data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
     val MAX_VALUE = Storage(Long.MAX_VALUE)
     val MIN_VALUE = Storage(Long.MIN_VALUE)
 
-    @JvmStatic fun of(value: Double, unit: StorageUnit = StorageUnit.BYTE): Storage =
+    @JvmStatic
+    fun of(value: Double, unit: StorageUnit = StorageUnit.BYTE): Storage =
         Storage((value * unit.factor).toLong())
 
-    @JvmStatic fun parse(str: String): Storage {
+    @JvmStatic
+    fun parse(str: String): Storage {
       if (str.isBlank())
         return Storage.ZERO
 

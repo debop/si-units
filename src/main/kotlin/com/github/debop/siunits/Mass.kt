@@ -2,7 +2,6 @@
 
 package com.github.debop.siunits
 
-import org.slf4j.LoggerFactory
 import java.io.Serializable
 
 const val MILLIGRAM_IN_GRAM: Double = 1.0 / 1000.0
@@ -32,7 +31,8 @@ enum class MassUnit(val unitName: String, val factor: Double) {
 
   companion object {
 
-    @JvmStatic fun parse(unitStr: String): MassUnit {
+    @JvmStatic
+    fun parse(unitStr: String): MassUnit {
       var lower = unitStr.toLowerCase()
       if (lower.endsWith("s")) {
         lower = lower.dropLast(1)
@@ -49,8 +49,6 @@ enum class MassUnit(val unitName: String, val factor: Double) {
  * @author debop sunghyouk.bae@gmail.com
  */
 data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
-
-  override fun compareTo(other: Mass): Int = this.gram.compareTo(other.gram)
 
   fun inMilligram(): Double = gram / MILLIGRAM_IN_GRAM
   fun inGram(): Double = gram
@@ -76,7 +74,6 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
 
   operator final fun unaryMinus(): Mass = Mass(-gram)
 
-
   fun toHuman(): String {
     var unit = MassUnit.GRAM
     var display = Math.abs(gram)
@@ -97,11 +94,15 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
     return "%.1f %s".format(display * Math.signum(gram), unit.unitName)
   }
 
+  override fun compareTo(other: Mass): Int = this.gram.compareTo(other.gram)
+
   companion object {
 
-    private val log = LoggerFactory.getLogger(MassUnit::class.java)
+//    private val log = LoggerFactory.getLogger(MassUnit::class.java)
 
     val ZERO: Mass = Mass(0.0)
+    val MAX_VALUE = Mass(Double.MAX_VALUE)
+    val MIN_VALUE = Mass(Double.MIN_VALUE)
     val POSITIVE_INF: Mass = Mass(Double.POSITIVE_INFINITY)
     val NEGATIVE_INF: Mass = Mass(Double.NEGATIVE_INFINITY)
     val NaN: Mass = Mass(Double.NaN)
@@ -109,10 +110,11 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
     /**
      * Static constructor
      */
-    @JvmStatic fun of(value: Double, unit: MassUnit = MassUnit.GRAM): Mass =
-        Mass(value * unit.factor)
+    @JvmStatic
+    fun of(value: Double, unit: MassUnit = MassUnit.GRAM): Mass = Mass(value * unit.factor)
 
-    @JvmStatic fun parse(str: String): Mass {
+    @JvmStatic
+    fun parse(str: String): Mass {
       if (str.isBlank())
         return Mass.ZERO
 
@@ -121,7 +123,7 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
         if (v.isNullOrBlank()) v = ""
         if (u.startsWith(".")) u = u.drop(1)
 
-        log.debug("value={}, unit={}", v, u)
+//        log.debug("value={}, unit={}", v, u)
 
         return of(v.toDouble(), MassUnit.parse(u))
 

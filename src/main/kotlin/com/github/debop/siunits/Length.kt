@@ -51,7 +51,8 @@ data class Length(val meter: Double) : Comparable<Length>, Serializable {
     val NEGATIVE_INF = Length(Double.NEGATIVE_INFINITY)
     val NaN = Length(Double.NaN)
 
-    @JvmStatic fun of(length: Double, unit: LengthUnit = LengthUnit.METER): Length = when (unit) {
+    @JvmStatic
+    fun of(length: Double, unit: LengthUnit = LengthUnit.METER): Length = when (unit) {
       LengthUnit.MILLIMETER -> length.millimeter()
       LengthUnit.CENTIMETER -> length.centimeter()
       LengthUnit.METER      -> length.meter()
@@ -59,7 +60,8 @@ data class Length(val meter: Double) : Comparable<Length>, Serializable {
       else                  -> throw UnsupportedOperationException("Unknwon Length unit. unit=$unit")
     }
 
-    @JvmStatic fun parse(str: String): Length {
+    @JvmStatic
+    fun parse(str: String): Length {
       if (str.isBlank()) {
         return ZERO
       }

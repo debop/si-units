@@ -141,7 +141,7 @@ data class Pressure(val pascal: Double = 0.0) : Comparable<Pressure>, Serializab
     val MAX_VALUE = Pressure(Double.MAX_VALUE)
     val POSITIVE_INF = Pressure(Double.POSITIVE_INFINITY)
     val NEGATIVE_INF = Pressure(Double.NEGATIVE_INFINITY)
-
+    val NaN = Pressure(Double.NaN)
 
     @JvmStatic fun of(value: Double, unit: PressureUnit): Pressure =
         Pressure(value * unit.factor)
