@@ -4,6 +4,31 @@ package com.github.debop.siunits
 
 import java.io.Serializable
 
+
+fun Long.bytes(): Storage = Storage(this)
+fun Long.kilobytes(): Storage = Storage.of(this.toDouble(), StorageUnit.KILO_BYTE)
+fun Long.megabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.MEGA_BYTE)
+fun Long.gigabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.GIGA_BYTE)
+fun Long.terabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.TERA_BYTE)
+fun Long.petabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.PETA_BYTE)
+fun Long.exabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.EXA_BYTE)
+
+fun Double.bytes(): Storage = Storage(this.toLong())
+fun Double.kilobytes(): Storage = Storage.of(this, StorageUnit.KILO_BYTE)
+fun Double.megabytes(): Storage = Storage.of(this, StorageUnit.MEGA_BYTE)
+fun Double.gigabytes(): Storage = Storage.of(this, StorageUnit.GIGA_BYTE)
+fun Double.terabytes(): Storage = Storage.of(this, StorageUnit.TERA_BYTE)
+fun Double.petabytes(): Storage = Storage.of(this, StorageUnit.PETA_BYTE)
+fun Double.exabytes(): Storage = Storage.of(this, StorageUnit.EXA_BYTE)
+
+const val BYTE_FACTOR: Long = 1L
+const val KILO_FACTOR: Long = 1L shl 10
+const val MEGA_FACTOR: Long = 1L shl 20
+const val GIGA_FACTOR: Long = 1L shl 30
+const val TERA_FACTOR: Long = 1L shl 40
+const val PETA_FACTOR: Long = 1L shl 50
+const val EXA_FACTOR: Long = 1L shl 60
+
 /**
  * 저장 단위 (Bytes) 종류
  */
@@ -19,28 +44,13 @@ enum class StorageUnit(val unitName: String, val factor: Long) {
 
   companion object {
 
-    const val BYTE_FACTOR: Long = 1L
-    const val KILO_FACTOR: Long = 1L shl 10
-    const val MEGA_FACTOR: Long = 1L shl 20
-    const val GIGA_FACTOR: Long = 1L shl 30
-    const val TERA_FACTOR: Long = 1L shl 40
-    const val PETA_FACTOR: Long = 1L shl 50
-    const val EXA_FACTOR: Long = 1L shl 60
-
     @JvmStatic fun parse(unitStr: String): StorageUnit {
       var upper = unitStr.toUpperCase()
       if (upper.endsWith("s")) {
         upper = upper.dropLast(1)
       }
-      return when (upper) {
-        StorageUnit.BYTE.unitName      -> StorageUnit.BYTE
-        StorageUnit.KILO_BYTE.unitName -> StorageUnit.KILO_BYTE
-        StorageUnit.GIGA_BYTE.unitName -> StorageUnit.GIGA_BYTE
-        StorageUnit.TERA_BYTE.unitName -> StorageUnit.TERA_BYTE
-        StorageUnit.PETA_BYTE.unitName -> StorageUnit.PETA_BYTE
-        StorageUnit.EXA_BYTE.unitName  -> StorageUnit.EXA_BYTE
-        else                           -> throw NumberFormatException("알 수 없는 MassUnit 문자열입니다. unit=$unitStr")
-      }
+      return StorageUnit.values().first { it.unitName == upper }
+             ?: throw NumberFormatException("알 수 없는 MassUnit 문자열입니다. unit=$unitStr")
     }
   }
 }
@@ -70,12 +80,12 @@ data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
   operator fun unaryMinus(): Storage = Storage(-bytes)
 
   fun inBytes(): Long = bytes
-  fun inKiloBytes(): Long = bytes / StorageUnit.KILO_FACTOR
-  fun inMegaBytes(): Long = bytes / StorageUnit.MEGA_FACTOR
-  fun inGigaBytes(): Long = bytes / StorageUnit.GIGA_FACTOR
-  fun inTeraBytes(): Long = bytes / StorageUnit.TERA_FACTOR
-  fun inPetaBytes(): Long = bytes / StorageUnit.PETA_FACTOR
-  fun inExaBytes(): Long = bytes / StorageUnit.EXA_FACTOR
+  fun inKiloBytes(): Long = bytes / KILO_FACTOR
+  fun inMegaBytes(): Long = bytes / MEGA_FACTOR
+  fun inGigaBytes(): Long = bytes / GIGA_FACTOR
+  fun inTeraBytes(): Long = bytes / TERA_FACTOR
+  fun inPetaBytes(): Long = bytes / PETA_FACTOR
+  fun inExaBytes(): Long = bytes / EXA_FACTOR
 
   override fun compareTo(other: Storage): Int = bytes.compareTo(other.bytes)
 
@@ -104,9 +114,10 @@ data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
     val MAX_VALUE = Storage(Long.MAX_VALUE)
     val MIN_VALUE = Storage(Long.MIN_VALUE)
 
-    fun of(value: Double, unit: StorageUnit = StorageUnit.BYTE): Storage = Storage((value * unit.factor).toLong())
+    @JvmStatic fun of(value: Double, unit: StorageUnit = StorageUnit.BYTE): Storage =
+        Storage((value * unit.factor).toLong())
 
-    @JvmStatic fun valueOf(str: String): Storage {
+    @JvmStatic fun parse(str: String): Storage {
       if (str.isBlank())
         return Storage.ZERO
 
@@ -123,19 +134,3 @@ data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
     }
   }
 }
-
-fun Long.bytes(): Storage = Storage(this)
-fun Long.kilobytes(): Storage = Storage.of(this.toDouble(), StorageUnit.KILO_BYTE)
-fun Long.megabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.MEGA_BYTE)
-fun Long.gigabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.GIGA_BYTE)
-fun Long.terabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.TERA_BYTE)
-fun Long.petabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.PETA_BYTE)
-fun Long.exabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.EXA_BYTE)
-
-fun Double.bytes(): Storage = Storage(this.toLong())
-fun Double.kilobytes(): Storage = Storage.of(this, StorageUnit.KILO_BYTE)
-fun Double.megabytes(): Storage = Storage.of(this, StorageUnit.MEGA_BYTE)
-fun Double.gigabytes(): Storage = Storage.of(this, StorageUnit.GIGA_BYTE)
-fun Double.terabytes(): Storage = Storage.of(this, StorageUnit.TERA_BYTE)
-fun Double.petabytes(): Storage = Storage.of(this, StorageUnit.PETA_BYTE)
-fun Double.exabytes(): Storage = Storage.of(this, StorageUnit.EXA_BYTE)

@@ -32,14 +32,11 @@ enum class MassUnit(val unitName: String, val factor: Double) {
 
   companion object {
 
-    private val log = LoggerFactory.getLogger(MassUnit::class.java)
-
     @JvmStatic fun parse(unitStr: String): MassUnit {
       var lower = unitStr.toLowerCase()
       if (lower.endsWith("s")) {
         lower = lower.dropLast(1)
       }
-      log.debug("lower = {}", lower)
       return MassUnit.values().find { it.unitName == lower }
              ?: throw NumberFormatException("알 수 없는 MassUnit 문자열입니다. unit=$unitStr")
     }
@@ -112,7 +109,8 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
     /**
      * Static constructor
      */
-    @JvmStatic fun of(value: Double, unit: MassUnit = MassUnit.GRAM): Mass = Mass(value * unit.factor)
+    @JvmStatic fun of(value: Double, unit: MassUnit = MassUnit.GRAM): Mass =
+        Mass(value * unit.factor)
 
     @JvmStatic fun parse(str: String): Mass {
       if (str.isBlank())
