@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.github.debop.siunits.StorageKt.*;
+import static com.github.debop.siunits.storages.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageTest extends AbstractUnitTest {

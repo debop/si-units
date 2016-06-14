@@ -1,4 +1,4 @@
-@file:JvmName("StorageKt")
+@file:JvmName("storages")
 
 package com.github.debop.siunits
 

@@ -1,13 +1,14 @@
 buildscript {
 
     ext.kotlinVersion = '1.0.2'
-
+    ext.dokkaVersion = '0.9.8'
     repositories {
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion"
     }
 }
 
@@ -15,6 +16,7 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'maven'
 apply plugin: 'idea'
+apply plugin: 'org.jetbrains.dokka'
 
 group = 'com.github.debop'
 version = '0.0.1-SNAPSHOT'
@@ -50,6 +52,21 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'io.kotlintest:kotlintest:1.2.0'
     testCompile 'org.assertj:assertj-core:3.4.1'
+}
+
+dokka {
+    moduleName = 'si-units'
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+    processConfigurations = ['compile']
+    //includes = ['packages.md', 'extra.md']
+    //samples = ['samples/basic.kt', 'samples/advanced.kt']
+    linkMapping {
+        dir = "src/kotlin"
+        url = "https://github.com/debop/si-units/blob/master/src/main/kotlin"
+        suffix = "#L"
+    }
+    sourceDirs = files('src/main/kotlin')
 }
 
 task wrapper(type: Wrapper) {

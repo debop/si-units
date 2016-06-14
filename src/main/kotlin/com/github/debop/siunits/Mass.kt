@@ -1,4 +1,4 @@
-@file:JvmName("MassKt")
+@file:JvmName("masses")
 
 package com.github.debop.siunits
 
