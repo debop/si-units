@@ -49,8 +49,8 @@ enum class StorageUnit(val unitName: String, val factor: Long) {
       if (upper.endsWith("s")) {
         upper = upper.dropLast(1)
       }
-      return StorageUnit.values().first { it.unitName == upper }
-             ?: throw NumberFormatException("알 수 없는 MassUnit 문자열입니다. unit=$unitStr")
+      return StorageUnit.values().find { it.unitName == upper }
+             ?: throw NumberFormatException("Unknown Storage unit. unit=$unitStr")
     }
   }
 }

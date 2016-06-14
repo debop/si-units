@@ -26,7 +26,7 @@ enum class LengthUnit(val unitName: String, val factor: Double) {
 
     @JvmStatic fun parse(str: String): LengthUnit {
       val lower = str.toLowerCase()
-      return LengthUnit.values().first { it.unitName == lower }
+      return LengthUnit.values().find { it.unitName == lower }
              ?: throw UnsupportedOperationException("Unknwon Length unit string. str=$str")
     }
   }

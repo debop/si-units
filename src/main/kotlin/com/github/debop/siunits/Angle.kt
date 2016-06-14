@@ -23,7 +23,7 @@ enum class AngleUnit(val unitName: String) {
 
     @JvmStatic fun parse(str: String): AngleUnit {
       val lower = str.toLowerCase()
-      return AngleUnit.values().first { it.unitName == lower }
+      return AngleUnit.values().find { it.unitName == lower }
              ?: throw NumberFormatException("Unknwon AngleUnit format. str=$str")
     }
   }
