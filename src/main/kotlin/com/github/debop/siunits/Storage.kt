@@ -5,46 +5,39 @@ package com.github.debop.siunits
 import java.io.Serializable
 
 
-fun Long.bytes(): Storage = Storage(this)
-fun Long.kilobytes(): Storage = Storage.of(this.toDouble(), StorageUnit.KILO_BYTE)
-fun Long.megabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.MEGA_BYTE)
-fun Long.gigabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.GIGA_BYTE)
-fun Long.terabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.TERA_BYTE)
-fun Long.petabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.PETA_BYTE)
-fun Long.exabytes(): Storage = Storage.of(this.toDouble(), StorageUnit.EXA_BYTE)
+fun Long.toBytes(): Storage = Storage(this)
+fun Long.toKBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.KBYTE)
+fun Long.toMBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.MBYTE)
+fun Long.toGBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.GBYTE)
+fun Long.toTBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.TBYTE)
+fun Long.toPBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.PBYTE)
+fun Long.toXBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.XBYTE)
 
-fun Double.bytes(): Storage = Storage(this.toLong())
-fun Double.kilobytes(): Storage = Storage.of(this, StorageUnit.KILO_BYTE)
-fun Double.megabytes(): Storage = Storage.of(this, StorageUnit.MEGA_BYTE)
-fun Double.gigabytes(): Storage = Storage.of(this, StorageUnit.GIGA_BYTE)
-fun Double.terabytes(): Storage = Storage.of(this, StorageUnit.TERA_BYTE)
-fun Double.petabytes(): Storage = Storage.of(this, StorageUnit.PETA_BYTE)
-fun Double.exabytes(): Storage = Storage.of(this, StorageUnit.EXA_BYTE)
-
-const val BYTE_FACTOR: Long = 1L
-const val KILO_FACTOR: Long = 1L shl 10
-const val MEGA_FACTOR: Long = 1L shl 20
-const val GIGA_FACTOR: Long = 1L shl 30
-const val TERA_FACTOR: Long = 1L shl 40
-const val PETA_FACTOR: Long = 1L shl 50
-const val EXA_FACTOR: Long = 1L shl 60
+fun Double.toBytes(): Storage = Storage(this.toLong())
+fun Double.toKBytes(): Storage = Storage.of(this, StorageUnit.KBYTE)
+fun Double.toMBytes(): Storage = Storage.of(this, StorageUnit.MBYTE)
+fun Double.toGBytes(): Storage = Storage.of(this, StorageUnit.GBYTE)
+fun Double.toTBytes(): Storage = Storage.of(this, StorageUnit.TBYTE)
+fun Double.toPBytes(): Storage = Storage.of(this, StorageUnit.PBYTE)
+fun Double.toXBytes(): Storage = Storage.of(this, StorageUnit.XBYTE)
 
 /**
  * 저장 단위 (Bytes) 종류
  */
 enum class StorageUnit(val unitName: String, val factor: Long) {
 
-  BYTE("B", 1),
-  KILO_BYTE("KB", KILO_FACTOR),
-  MEGA_BYTE("MB", MEGA_FACTOR),
-  GIGA_BYTE("GB", GIGA_FACTOR),
-  TERA_BYTE("TB", TERA_FACTOR),
-  PETA_BYTE("PB", PETA_FACTOR),
-  EXA_BYTE("XB", EXA_FACTOR);
+  BYTE("B", 1L),
+  KBYTE("KB", 1L shl 10),
+  MBYTE("MB", 1L shl 20),
+  GBYTE("GB", 1L shl 30),
+  TBYTE("TB", 1L shl 40),
+  PBYTE("PB", 1L shl 50),
+  XBYTE("XB", 1L shl 60);
 
   companion object {
 
-    @JvmStatic fun parse(unitStr: String): StorageUnit {
+    @JvmStatic
+    fun parse(unitStr: String): StorageUnit {
       var upper = unitStr.toUpperCase()
       if (upper.endsWith("s")) {
         upper = upper.dropLast(1)
@@ -60,32 +53,32 @@ enum class StorageUnit(val unitName: String, val factor: Long) {
  */
 data class Storage(val bytes: Long = 0L) : Comparable<Storage>, Serializable {
 
-  operator fun plus(that: Storage): Storage = Storage(bytes + that.bytes)
-  operator fun plus(scalar: Long): Storage = Storage(bytes + scalar)
-  operator fun minus(that: Storage): Storage = Storage(bytes - that.bytes)
-  operator fun minus(scalar: Long): Storage = Storage(bytes - scalar)
+  final operator fun plus(that: Storage): Storage = Storage(bytes + that.bytes)
+  final operator fun plus(scalar: Long): Storage = Storage(bytes + scalar)
+  final operator fun minus(that: Storage): Storage = Storage(bytes - that.bytes)
+  final operator fun minus(scalar: Long): Storage = Storage(bytes - scalar)
 
-  operator fun times(that: Storage): Storage = Storage(bytes * that.bytes)
-  operator fun times(scalar: Long): Storage = Storage(bytes * scalar)
-  operator fun times(scalar: Int): Storage = Storage(bytes * scalar)
-  operator fun times(scalar: Float): Storage = Storage((bytes * scalar).toLong())
-  operator fun times(scalar: Double): Storage = Storage((bytes * scalar).toLong())
+  final operator fun times(that: Storage): Storage = Storage(bytes * that.bytes)
+  final operator fun times(scalar: Long): Storage = Storage(bytes * scalar)
+  final operator fun times(scalar: Int): Storage = Storage(bytes * scalar)
+  final operator fun times(scalar: Float): Storage = Storage((bytes * scalar).toLong())
+  final operator fun times(scalar: Double): Storage = Storage((bytes * scalar).toLong())
 
-  operator fun div(that: Storage): Storage = Storage(bytes / that.bytes)
-  operator fun div(scalar: Long): Storage = Storage(bytes / scalar)
-  operator fun div(scalar: Int): Storage = Storage(bytes / scalar)
-  operator fun div(scalar: Float): Storage = Storage((bytes / scalar).toLong())
-  operator fun div(scalar: Double): Storage = Storage((bytes / scalar).toLong())
+  final operator fun div(that: Storage): Storage = Storage(bytes / that.bytes)
+  final operator fun div(scalar: Long): Storage = Storage(bytes / scalar)
+  final operator fun div(scalar: Int): Storage = Storage(bytes / scalar)
+  final operator fun div(scalar: Float): Storage = Storage((bytes / scalar).toLong())
+  final operator fun div(scalar: Double): Storage = Storage((bytes / scalar).toLong())
 
-  operator fun unaryMinus(): Storage = Storage(-bytes)
+  final operator fun unaryMinus(): Storage = Storage(-bytes)
 
   fun inBytes(): Long = bytes
-  fun inKiloBytes(): Long = bytes / KILO_FACTOR
-  fun inMegaBytes(): Long = bytes / MEGA_FACTOR
-  fun inGigaBytes(): Long = bytes / GIGA_FACTOR
-  fun inTeraBytes(): Long = bytes / TERA_FACTOR
-  fun inPetaBytes(): Long = bytes / PETA_FACTOR
-  fun inExaBytes(): Long = bytes / EXA_FACTOR
+  fun inKBytes(): Long = bytes / StorageUnit.KBYTE.factor
+  fun inMBytes(): Long = bytes / StorageUnit.MBYTE.factor
+  fun inGBytes(): Long = bytes / StorageUnit.GBYTE.factor
+  fun inTBytes(): Long = bytes / StorageUnit.TBYTE.factor
+  fun inPBytes(): Long = bytes / StorageUnit.PBYTE.factor
+  fun inXBytes(): Long = bytes / StorageUnit.XBYTE.factor
 
   override fun compareTo(other: Storage): Int = bytes.compareTo(other.bytes)
   override fun toString(): String = "$bytes ${StorageUnit.BYTE.unitName}"
@@ -96,10 +89,10 @@ data class Storage(val bytes: Long = 0L) : Comparable<Storage>, Serializable {
 
     while (display > 1126.0) {
       order++
-      display /= StorageUnit.KILO_BYTE.factor
+      display /= StorageUnit.KBYTE.factor
     }
 
-    return "%.1f %s".format(Math.signum(bytes.toDouble()) * display, StorageUnit.values()[order])
+    return "%.1f %s".format(Math.signum(bytes.toDouble()) * display, StorageUnit.values()[order].unitName)
   }
 
   companion object {
@@ -109,7 +102,7 @@ data class Storage(val bytes: Long = 0L) : Comparable<Storage>, Serializable {
     final val MIN_VALUE = Storage(Long.MIN_VALUE)
 
     @JvmStatic
-    fun of(value: Double = 0.0, unit: StorageUnit = StorageUnit.BYTE): Storage =
+    final fun of(value: Double = 0.0, unit: StorageUnit = StorageUnit.BYTE): Storage =
         Storage((value * unit.factor).toLong())
 
     @JvmStatic

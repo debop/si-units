@@ -14,15 +14,15 @@ public class StorageTest extends AbstractUnitTest {
 
   @Test
   public void convertMassUnit() {
-    assertThat(bytes(1).inBytes()).isEqualTo(1);
-    assertThat(kilobytes(1).inKiloBytes()).isEqualTo(1);
-    assertThat(megabytes(1).inMegaBytes()).isEqualTo(1);
-    assertThat(gigabytes(1).inGigaBytes()).isEqualTo(1);
+    assertThat(toBytes(1).inBytes()).isEqualTo(1);
+    assertThat(toKBytes(1).inKBytes()).isEqualTo(1);
+    assertThat(toMBytes(1).inMBytes()).isEqualTo(1);
+    assertThat(toGBytes(1).inGBytes()).isEqualTo(1);
 
-    assertThat(bytes(1 << 10).inKiloBytes()).isEqualTo(1);
-    assertThat(bytes(1.0).inKiloBytes()).isEqualTo(0);
-    assertThat(kilobytes(1).inBytes()).isEqualTo(1 << 10);
-    assertThat(megabytes(1).inBytes()).isEqualTo(1 << 20);
+    assertThat(toBytes(1 << 10).inKBytes()).isEqualTo(1);
+    assertThat(toBytes(1.0).inKBytes()).isEqualTo(0);
+    assertThat(toKBytes(1).inBytes()).isEqualTo(1 << 10);
+    assertThat(toMBytes(1).inBytes()).isEqualTo(1 << 20);
   }
 
 }
