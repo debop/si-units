@@ -96,10 +96,9 @@ data class Angle(val degree: Double) : Comparable<Angle>, Serializable {
       if (str.isBlank())
         return ZERO
 
-      val (length, unit) = str.split(" ", limit = 2)
-
       try {
-        return of(length.toDouble(), AngleUnit.parse(unit))
+        val (angle, unit) = str.split(" ", limit = 2)
+        return of(angle.toDouble(), AngleUnit.parse(unit))
       } catch(e: Exception) {
         throw NumberFormatException("Invalid Angle string. str=$str")
       }

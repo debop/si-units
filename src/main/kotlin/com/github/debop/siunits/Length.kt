@@ -4,27 +4,43 @@ package com.github.debop.siunits
 
 import java.io.Serializable
 
-
-const val MILLIMETER_IN_METER = 1.0 / 1000.0
-const val CENTIMETER_IN_METER = 1.0 / 100.0
+const val MILLIMETER_IN_METER = 1.0e-3
+const val CENTIMETER_IN_METER = 1.0e-2
 const val METER_IN_METER = 1.0
-const val KILOMETER_IN_METER = 1000.0
+const val KILOMETER_IN_METER = 1.0e3
+const val INCH_IN_METER = 39.37
+const val FEET_IN_METER = 3.2809
+const val YARD_IN_METER = 1.0936
+const val MILE_IN_METER = 1609.344
 
-fun Double.millimeter(): Length = Length(this * MILLIMETER_IN_METER)
-fun Double.centimeter(): Length = Length(this * CENTIMETER_IN_METER)
-fun Double.meter(): Length = Length(this)
-fun Double.kilometer(): Length = Length(this * KILOMETER_IN_METER)
+fun Double.millimeter(): Length = Length.of(this, LengthUnit.MILLIMETER)
+fun Double.centimeter(): Length = Length.of(this, LengthUnit.CENTIMETER)
+fun Double.meter(): Length = Length.of(this)
+fun Double.kilometer(): Length = Length.of(this, LengthUnit.KILOMETER)
+fun Double.inch(): Length = Length.of(this, LengthUnit.INCH)
+fun Double.feet(): Length = Length.of(this, LengthUnit.FEET)
+fun Double.yard(): Length = Length.of(this, LengthUnit.YARD)
+fun Double.mile(): Length = Length.of(this, LengthUnit.MILE)
 
+/**
+ * 길이(Length)의 단위
+ */
 enum class LengthUnit(val unitName: String, val factor: Double) {
 
   MILLIMETER("mm", MILLIMETER_IN_METER),
   CENTIMETER("cm", CENTIMETER_IN_METER),
   METER("m", METER_IN_METER),
-  KILOMETER("km", KILOMETER_IN_METER);
+  KILOMETER("km", KILOMETER_IN_METER),
+
+  INCH("inch", INCH_IN_METER),
+  FEET("ft", FEET_IN_METER),
+  YARD("yd", YARD_IN_METER),
+  MILE("ml", MILE_IN_METER);
 
   companion object {
 
-    @JvmStatic fun parse(str: String): LengthUnit {
+    @JvmStatic
+    fun parse(str: String): LengthUnit {
       val lower = str.toLowerCase()
       return LengthUnit.values().find { it.unitName == lower }
              ?: throw UnsupportedOperationException("Unknwon Length unit string. str=$str")
@@ -32,16 +48,27 @@ enum class LengthUnit(val unitName: String, val factor: Double) {
   }
 }
 
+/**
+ * 길이를 나타내는 클래스
+ */
+public data class Length(val meter: Double) : Comparable<Length>, Serializable {
 
-data class Length(val meter: Double) : Comparable<Length>, Serializable {
+  public operator final fun plus(other: Length): Length = Length(meter + other.meter)
+  public operator final fun minus(other: Length): Length = Length(meter - other.meter)
+  public operator final fun times(scalar: Double): Length = Length(meter * scalar)
+  public operator final fun div(scalar: Double): Length = Length(meter / scalar)
+  public operator final fun unaryMinus(): Length = Length(-meter)
 
-  fun inMillimeter(): Double = meter / MILLIMETER_IN_METER
-  fun inCentimeter(): Double = meter / CENTIMETER_IN_METER
+  fun inMillimeter(): Double = meter / LengthUnit.MILLIMETER.factor
+  fun inCentimeter(): Double = meter / LengthUnit.CENTIMETER.factor
   fun inMeter(): Double = meter
-  fun inKilometer(): Double = meter * KILOMETER_IN_METER
+  fun inKilometer(): Double = meter / LengthUnit.KILOMETER.factor
+  fun inInch(): Double = meter / LengthUnit.INCH.factor
+  fun inFeet(): Double = meter / LengthUnit.FEET.factor
+  fun inYard(): Double = meter / LengthUnit.YARD.factor
+  fun inMile(): Double = meter / LengthUnit.MILE.factor
 
   override fun compareTo(other: Length): Int = meter.compareTo(other.meter)
-
 
   companion object {
     val ZERO = Length(0.0)
@@ -52,23 +79,15 @@ data class Length(val meter: Double) : Comparable<Length>, Serializable {
     val NaN = Length(Double.NaN)
 
     @JvmStatic
-    fun of(length: Double, unit: LengthUnit = LengthUnit.METER): Length = when (unit) {
-      LengthUnit.MILLIMETER -> length.millimeter()
-      LengthUnit.CENTIMETER -> length.centimeter()
-      LengthUnit.METER      -> length.meter()
-      LengthUnit.KILOMETER  -> length.kilometer()
-      else                  -> throw UnsupportedOperationException("Unknwon Length unit. unit=$unit")
-    }
+    fun of(length: Double, unit: LengthUnit = LengthUnit.METER): Length = Length(length * unit.factor)
 
     @JvmStatic
     fun parse(str: String): Length {
       if (str.isBlank()) {
         return ZERO
       }
-
-      val (length, unit) = str.split(" ", limit = 2)
-
       try {
+        val (length, unit) = str.split(" ", limit = 2)
         return of(length.toDouble(), LengthUnit.parse(unit))
       } catch(e: Exception) {
         throw NumberFormatException("Invalid Length string. str=$str")

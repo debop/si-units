@@ -66,10 +66,10 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
   operator final fun plus(other: Mass): Mass = Mass(gram + other.gram)
   operator final fun minus(other: Mass): Mass = Mass(gram - other.gram)
 
-  operator final fun times(scala: Double): Mass = Mass(gram * scala)
+  operator final fun times(scalar: Double): Mass = Mass(gram * scalar)
   operator final fun times(other: Mass): Mass = Mass(gram * other.gram)
 
-  operator final fun div(scala: Double): Mass = Mass(gram / scala)
+  operator final fun div(scalar: Double): Mass = Mass(gram / scalar)
   operator final fun div(other: Mass): Mass = Mass(gram / other.gram)
 
   operator final fun unaryMinus(): Mass = Mass(-gram)
@@ -119,12 +119,7 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
         return Mass.ZERO
 
       try {
-        var (v, u) = str.trim().split(" ", limit = 2)
-        if (v.isNullOrBlank()) v = ""
-        if (u.startsWith(".")) u = u.drop(1)
-
-//        log.debug("value={}, unit={}", v, u)
-
+        val (v, u) = str.trim().split(" ", limit = 2)
         return of(v.toDouble(), MassUnit.parse(u))
 
       } catch(e: Exception) {

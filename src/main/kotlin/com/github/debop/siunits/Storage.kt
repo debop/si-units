@@ -61,21 +61,21 @@ enum class StorageUnit(val unitName: String, val factor: Long) {
 data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
 
   operator fun plus(that: Storage): Storage = Storage(bytes + that.bytes)
-  operator fun plus(scala: Long): Storage = Storage(bytes + scala)
+  operator fun plus(scalar: Long): Storage = Storage(bytes + scalar)
   operator fun minus(that: Storage): Storage = Storage(bytes - that.bytes)
-  operator fun minus(scala: Long): Storage = Storage(bytes - scala)
+  operator fun minus(scalar: Long): Storage = Storage(bytes - scalar)
 
   operator fun times(that: Storage): Storage = Storage(bytes * that.bytes)
-  operator fun times(scala: Long): Storage = Storage(bytes * scala)
-  operator fun times(scala: Int): Storage = Storage(bytes * scala)
-  operator fun times(scala: Float): Storage = Storage((bytes * scala).toLong())
-  operator fun times(scala: Double): Storage = Storage((bytes * scala).toLong())
+  operator fun times(scalar: Long): Storage = Storage(bytes * scalar)
+  operator fun times(scalar: Int): Storage = Storage(bytes * scalar)
+  operator fun times(scalar: Float): Storage = Storage((bytes * scalar).toLong())
+  operator fun times(scalar: Double): Storage = Storage((bytes * scalar).toLong())
 
   operator fun div(that: Storage): Storage = Storage(bytes / that.bytes)
-  operator fun div(scala: Long): Storage = Storage(bytes / scala)
-  operator fun div(scala: Int): Storage = Storage(bytes / scala)
-  operator fun div(scala: Float): Storage = Storage((bytes / scala).toLong())
-  operator fun div(scala: Double): Storage = Storage((bytes / scala).toLong())
+  operator fun div(scalar: Long): Storage = Storage(bytes / scalar)
+  operator fun div(scalar: Int): Storage = Storage(bytes / scalar)
+  operator fun div(scalar: Float): Storage = Storage((bytes / scalar).toLong())
+  operator fun div(scalar: Double): Storage = Storage((bytes / scalar).toLong())
 
   operator fun unaryMinus(): Storage = Storage(-bytes)
 
@@ -113,19 +113,16 @@ data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
         Storage((value * unit.factor).toLong())
 
     @JvmStatic
-    fun parse(str: String): Storage {
-      if (str.isBlank())
+    fun parse(storageStr: String): Storage {
+      if (storageStr.isBlank())
         return Storage.ZERO
 
       try {
-        var (v, u) = str.split(".", limit = 2)
-        if (v.isNullOrBlank()) v = ""
-        if (u.startsWith(".")) u = u.drop(1)
-
+        val (v, u) = storageStr.split(" ", limit = 2)
         return of(v.toDouble(), StorageUnit.parse(u))
 
       } catch(e: Exception) {
-        throw NumberFormatException("Invalid Storage string. str=$str")
+        throw NumberFormatException("Invalid Storage string. storageStr=$storageStr")
       }
     }
   }

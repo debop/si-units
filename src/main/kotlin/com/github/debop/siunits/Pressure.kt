@@ -26,7 +26,7 @@ enum class PressureUnit(val unitName: String, val factor: Double) {
   KILO_PASCAL("kp", 1000.0),
 
   /**
-   * MegaPascal (1 MPa = 1000_000 Pa)
+   * MegaPascal (1 MPa = 1000,000 Pa)
    */
   MEGA_PASCLA("mp", 1.0e6),
 
@@ -150,8 +150,8 @@ data class Pressure(val pascal: Double = 0.0) : Comparable<Pressure>, Serializab
       if (str.isBlank())
         return ZERO
 
-      val (p, u) = str.split(" ", limit = 2)
       try {
+        val (p, u) = str.split(" ", limit = 2)
         return of(p.toDouble(), PressureUnit.parse(u))
       } catch(e: Exception) {
         throw NumberFormatException("Unknown pressure format. str=$str")
