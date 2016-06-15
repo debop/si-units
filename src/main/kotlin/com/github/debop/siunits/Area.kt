@@ -44,7 +44,7 @@ enum class AreaUnit(val unitName: String, val factor: Double) {
       if (lower.endsWith("s"))
         lower = lower.dropLast(1)
 
-      return AreaUnit.values().find { it.unitName == unitStr }
+      return AreaUnit.values().find { it.unitName == lower }
              ?: throw NumberFormatException("Unknown Area unit. unitStr=$unitStr")
     }
   }

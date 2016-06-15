@@ -82,8 +82,8 @@ enum class PressureUnit(val unitName: String, val factor: Double) {
       if (lower.endsWith("s"))
         lower = lower.dropLast(1)
 
-      return PressureUnit.values().find { it.unitName == unitStr }
-          ?: throw NumberFormatException("Unknown Pressure unit. unitStr=$unitStr")
+      return PressureUnit.values().find { it.unitName == lower }
+             ?: throw NumberFormatException("Unknown Pressure unit. unitStr=$unitStr")
     }
   }
 }

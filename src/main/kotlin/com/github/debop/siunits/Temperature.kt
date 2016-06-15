@@ -1,0 +1,65 @@
+@file:JvmName("temperatures")
+
+package com.github.debop.siunits
+
+import java.io.Serializable
+
+
+fun Double.toKelvin(): Temperature = Temperature.of(this)
+fun Double.toCelcius(): Temperature = Temperature.of(this, TemperatureUnit.CELCIUS)
+fun Double.toFahrenheit(): Temperature = Temperature.of(this, TemperatureUnit.FAHRENHEIT)
+
+fun Double.C2F(): Double = this * 1.8 + 32.0
+fun Double.F2C(): Double = (this - 32.0) / 1.8
+
+enum class TemperatureUnit(val unitName: String, val factor: Double) {
+
+  KELVIN("K", 0.0),
+  CELCIUS("C", 273.15),
+  FAHRENHEIT("F", 459.67);
+
+  companion object {
+    @JvmStatic
+    fun parse(unitStr: String): TemperatureUnit {
+      var upper = unitStr.toUpperCase()
+      if (upper.endsWith("s"))
+        upper = upper.dropLast(1)
+
+      return TemperatureUnit.values().find { it.unitName == upper }
+             ?: throw NumberFormatException("Unknown Temperature unit. unitStr=$unitStr")
+    }
+  }
+}
+
+data class Temperature(val kelvin: Double = 0.0) : Comparable<Temperature>, Serializable {
+
+  operator fun plus(other: Temperature) = Temperature(kelvin + other.kelvin)
+  operator fun minus(other: Temperature) = Temperature(kelvin - other.kelvin)
+  operator fun times(scalar: Double) = Temperature(kelvin * scalar)
+  operator fun div(scalar: Double) = Temperature(kelvin / scalar)
+  operator fun unaryMinus() = Temperature(-kelvin)
+
+  fun inKelvin(): Double = kelvin
+  fun inCelcius(): Double = kelvin - TemperatureUnit.CELCIUS.factor
+  fun inFahrenheit(): Double = kelvin - TemperatureUnit.FAHRENHEIT.factor
+
+
+  override fun compareTo(other: Temperature): Int = kelvin.compareTo(other.kelvin)
+
+  companion object {
+    val ZERO = Temperature(0.0)
+    val MIN_VALUE = Temperature(Double.MIN_VALUE)
+    val MAX_VALUE = Temperature(Double.MAX_VALUE)
+    val POSITIVE_INF = Temperature(Double.POSITIVE_INFINITY)
+    val NEGATIVE_INF = Temperature(Double.NEGATIVE_INFINITY)
+    val NaN = Temperature(Double.NaN)
+
+    @JvmStatic
+    fun of(temp: Double, unit: TemperatureUnit = TemperatureUnit.KELVIN): Temperature =
+        Temperature(temp + unit.factor)
+
+    @JvmStatic
+    fun parse(tempStr: String): Temperature = TODO()
+  }
+
+}
