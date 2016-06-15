@@ -43,8 +43,8 @@ data class Temperature(val kelvin: Double = 0.0) : Comparable<Temperature>, Seri
   fun inCelcius(): Double = kelvin - TemperatureUnit.CELCIUS.factor
   fun inFahrenheit(): Double = kelvin - TemperatureUnit.FAHRENHEIT.factor
 
-
   override fun compareTo(other: Temperature): Int = kelvin.compareTo(other.kelvin)
+  override fun toString(): String = "%.1f %s".format(kelvin, TemperatureUnit.KELVIN.unitName)
 
   companion object {
     val ZERO = Temperature(0.0)

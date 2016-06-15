@@ -95,6 +95,7 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
   }
 
   override fun compareTo(other: Mass): Int = this.gram.compareTo(other.gram)
+  override fun toString(): String = "%.1f %s".format(gram, MassUnit.GRAM.unitName)
 
   companion object {
 

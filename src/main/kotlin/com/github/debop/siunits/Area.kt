@@ -56,6 +56,7 @@ data class Area(val m2: Double = 0.0) : Comparable<Area>, Serializable {
   operator fun minus(other: Area): Area = Area(m2 - other.m2)
   operator fun times(scalar: Double): Area = Area(m2 / scalar)
   operator fun div(scalar: Double): Area = Area(m2 / scalar)
+  operator fun div(length: Length): Length = Length(m2 / length.meter)
 
   operator fun unaryMinus(): Area = Area(-m2)
 

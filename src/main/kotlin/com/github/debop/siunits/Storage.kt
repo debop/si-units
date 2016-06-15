@@ -58,7 +58,7 @@ enum class StorageUnit(val unitName: String, val factor: Long) {
 /**
  * 저장 단위 (Bytes) 를 나타내는 클래스
  */
-data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
+data class Storage(val bytes: Long = 0L) : Comparable<Storage>, Serializable {
 
   operator fun plus(that: Storage): Storage = Storage(bytes + that.bytes)
   operator fun plus(scalar: Long): Storage = Storage(bytes + scalar)
@@ -88,7 +88,7 @@ data class Storage(val bytes: Long = 0) : Comparable<Storage>, Serializable {
   fun inExaBytes(): Long = bytes / EXA_FACTOR
 
   override fun compareTo(other: Storage): Int = bytes.compareTo(other.bytes)
-  override fun toString(): String = "$bytes.${StorageUnit.BYTE.unitName}"
+  override fun toString(): String = "$bytes ${StorageUnit.BYTE.unitName}"
 
   fun toHuman(): String {
     var display = Math.abs(bytes)

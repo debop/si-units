@@ -51,13 +51,15 @@ enum class LengthUnit(val unitName: String, val factor: Double) {
 /**
  * 길이를 나타내는 클래스
  */
-public data class Length(val meter: Double) : Comparable<Length>, Serializable {
+public data class Length(val meter: Double = 0.0) : Comparable<Length>, Serializable {
 
   public operator final fun plus(other: Length): Length = Length(meter + other.meter)
   public operator final fun minus(other: Length): Length = Length(meter - other.meter)
   public operator final fun times(scalar: Double): Length = Length(meter * scalar)
+  public operator final fun times(other: Length): Area = Area(meter * other.meter)
   public operator final fun div(scalar: Double): Length = Length(meter / scalar)
   public operator final fun unaryMinus(): Length = Length(-meter)
+
 
   fun inMillimeter(): Double = meter / LengthUnit.MILLIMETER.factor
   fun inCentimeter(): Double = meter / LengthUnit.CENTIMETER.factor
@@ -69,6 +71,7 @@ public data class Length(val meter: Double) : Comparable<Length>, Serializable {
   fun inMile(): Double = meter / LengthUnit.MILE.factor
 
   override fun compareTo(other: Length): Int = meter.compareTo(other.meter)
+  override fun toString(): String = "%.1f %s".format(meter, LengthUnit.METER.factor)
 
   companion object {
     val ZERO = Length(0.0)

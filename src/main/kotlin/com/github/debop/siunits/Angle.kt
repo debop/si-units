@@ -37,7 +37,7 @@ enum class AngleUnit(val unitName: String) {
 /**
  * 각도를 나타내는 클래스입니다
  */
-data class Angle(val degree: Double) : Comparable<Angle>, Serializable {
+data class Angle(val degree: Double = 0.0) : Comparable<Angle>, Serializable {
 
   fun inDegree(): Double = this.degree
   fun inRadian(): Double = this.degree.toRadian()
@@ -60,7 +60,7 @@ data class Angle(val degree: Double) : Comparable<Angle>, Serializable {
   }
 
   override fun compareTo(other: Angle): Int = degree.compareTo(other.degree)
-  override fun toString(): String = "%.1f deg".format(degree)
+  override fun toString(): String = "%.1f %s".format(degree, AngleUnit.Degree.unitName)
 
   companion object {
 

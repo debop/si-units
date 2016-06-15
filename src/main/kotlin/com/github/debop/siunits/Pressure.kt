@@ -132,7 +132,7 @@ data class Pressure(val pascal: Double = 0.0) : Comparable<Pressure>, Serializab
   fun toHuman(): String = TODO()
 
   override fun compareTo(other: Pressure): Int = pascal.compareTo(other.pascal)
-  override fun toString(): String = "%.1f pascal".format(pascal)
+  override fun toString(): String = "%.1f %s".format(pascal, PressureUnit.PASCAL.unitName)
 
   companion object {
 
