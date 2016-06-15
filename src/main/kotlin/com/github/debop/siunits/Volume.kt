@@ -76,18 +76,29 @@ data class Volumn(val liter: Double = 0.0) : Comparable<Volumn>, Serializable {
   override fun toString(): String = "%.1f %s".format(liter, VolumnUnit.LITER.unitName)
 
   companion object {
-    val ZERO = Volumn(0.0)
-    val MAX_VALUE = Volumn(Double.MAX_VALUE)
-    val MIN_VALUE = Volumn(Double.MIN_VALUE)
-    val POSITIVE_INF = Volumn(Double.POSITIVE_INFINITY)
-    val NEGATIVE_INF = Volumn(Double.NEGATIVE_INFINITY)
-    val NaN = Volumn(Double.NaN)
+    final val ZERO = Volumn(0.0)
+    final val MAX_VALUE = Volumn(Double.MAX_VALUE)
+    final val MIN_VALUE = Volumn(Double.MIN_VALUE)
+    final val POSITIVE_INF = Volumn(Double.POSITIVE_INFINITY)
+    final val NEGATIVE_INF = Volumn(Double.NEGATIVE_INFINITY)
+    final val NaN = Volumn(Double.NaN)
 
     @JvmStatic
-    fun of(volumn: Double, unit: VolumnUnit): Volumn = Volumn(volumn * unit.factor)
+    fun of(volumn: Double, unit: VolumnUnit = VolumnUnit.LITER): Volumn =
+        Volumn(volumn * unit.factor)
 
     @JvmStatic
-    fun parse(volStr: String): Volumn = TODO()
+    fun parse(volStr: String): Volumn {
+      if (volStr.isNullOrBlank())
+        return ZERO
+
+      try {
+        val (vol, unit) = volStr.split(" ", limit = 2)
+        return of(vol.toDouble(), VolumnUnit.parse(unit))
+      } catch(e: Exception) {
+        throw NumberFormatException("Unknown Volumn string. volStr=$volStr")
+      }
+    }
   }
 
 }

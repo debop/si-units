@@ -39,7 +39,8 @@ enum class AreaUnit(val unitName: String, val factor: Double) {
 
   companion object {
 
-    @JvmStatic fun parse(unitStr: String): AreaUnit {
+    @JvmStatic
+    fun parse(unitStr: String): AreaUnit {
       var lower = unitStr.toLowerCase()
       if (lower.endsWith("s"))
         lower = lower.dropLast(1)
@@ -86,7 +87,7 @@ data class Area(val m2: Double = 0.0) : Comparable<Area>, Serializable {
     val NaN = Area(Double.NaN)
 
     @JvmStatic
-    fun of(area: Double, unit: AreaUnit = AreaUnit.METER_2): Area = Area(area * unit.factor)
+    fun of(area: Double = 0.0, unit: AreaUnit = AreaUnit.METER_2): Area = Area(area * unit.factor)
 
     @JvmStatic
     fun parse(areaStr: String): Area {

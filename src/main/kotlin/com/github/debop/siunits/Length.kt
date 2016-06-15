@@ -74,15 +74,16 @@ public data class Length(val meter: Double = 0.0) : Comparable<Length>, Serializ
   override fun toString(): String = "%.1f %s".format(meter, LengthUnit.METER.factor)
 
   companion object {
-    val ZERO = Length(0.0)
-    val MIN_VALUE = Length(Double.MIN_VALUE)
-    val MAX_VALUE = Length(Double.MAX_VALUE)
-    val POSITIVE_INF = Length(Double.POSITIVE_INFINITY)
-    val NEGATIVE_INF = Length(Double.NEGATIVE_INFINITY)
-    val NaN = Length(Double.NaN)
+    final val ZERO = Length(0.0)
+    final val MIN_VALUE = Length(Double.MIN_VALUE)
+    final val MAX_VALUE = Length(Double.MAX_VALUE)
+    final val POSITIVE_INF = Length(Double.POSITIVE_INFINITY)
+    final val NEGATIVE_INF = Length(Double.NEGATIVE_INFINITY)
+    final val NaN = Length(Double.NaN)
 
     @JvmStatic
-    fun of(length: Double, unit: LengthUnit = LengthUnit.METER): Length = Length(length * unit.factor)
+    fun of(length: Double = 0.0, unit: LengthUnit = LengthUnit.METER): Length =
+        Length(length * unit.factor)
 
     @JvmStatic
     fun parse(str: String): Length {

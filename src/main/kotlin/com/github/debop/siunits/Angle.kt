@@ -64,22 +64,22 @@ data class Angle(val degree: Double = 0.0) : Comparable<Angle>, Serializable {
 
   companion object {
 
-    val ZERO = Angle(0.0)
-    val DEGREE_ZERO = ZERO
-    val DEGREE_90 = Angle(90.0)
-    val DEGREE_180 = Angle(180.0)
-    val DEGREE_270 = Angle(270.0)
-    val DEGREE_360 = Angle(360.0)
+    final val ZERO = Angle(0.0)
+    final val DEGREE_ZERO = ZERO
+    final val DEGREE_90 = Angle(90.0)
+    final val DEGREE_180 = Angle(180.0)
+    final val DEGREE_270 = Angle(270.0)
+    final val DEGREE_360 = Angle(360.0)
 
-    val MAX_VALUE = Angle(Double.MAX_VALUE)
-    val MIN_VALUE = Angle(Double.MIN_VALUE)
-    val POSITIVE_INF = Angle(Double.POSITIVE_INFINITY)
-    val NEGATIVE_INF = Angle(Double.NEGATIVE_INFINITY)
-    val NaN = Angle(Double.NaN)
+    final val MAX_VALUE = Angle(Double.MAX_VALUE)
+    final val MIN_VALUE = Angle(Double.MIN_VALUE)
+    final val POSITIVE_INF = Angle(Double.POSITIVE_INFINITY)
+    final val NEGATIVE_INF = Angle(Double.NEGATIVE_INFINITY)
+    final val NaN = Angle(Double.NaN)
 
 
     @JvmStatic
-    fun of(angle: Double, unit: AngleUnit = AngleUnit.Degree): Angle = when (unit) {
+    fun of(angle: Double = 0.0, unit: AngleUnit = AngleUnit.Degree): Angle = when (unit) {
       AngleUnit.Degree -> degree(angle)
       AngleUnit.Radian -> radian(angle)
       else             -> throw IllegalArgumentException("Unknown Angle unit. unit=$unit")

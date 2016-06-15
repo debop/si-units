@@ -136,23 +136,25 @@ data class Pressure(val pascal: Double = 0.0) : Comparable<Pressure>, Serializab
 
   companion object {
 
-    val ZERO = Pressure(0.0)
-    val MIN_VALUE = Pressure(Double.MIN_VALUE)
-    val MAX_VALUE = Pressure(Double.MAX_VALUE)
-    val POSITIVE_INF = Pressure(Double.POSITIVE_INFINITY)
-    val NEGATIVE_INF = Pressure(Double.NEGATIVE_INFINITY)
-    val NaN = Pressure(Double.NaN)
+    final val ZERO = Pressure(0.0)
+    final val MIN_VALUE = Pressure(Double.MIN_VALUE)
+    final val MAX_VALUE = Pressure(Double.MAX_VALUE)
+    final val POSITIVE_INF = Pressure(Double.POSITIVE_INFINITY)
+    final val NEGATIVE_INF = Pressure(Double.NEGATIVE_INFINITY)
+    final val NaN = Pressure(Double.NaN)
 
-    @JvmStatic fun of(value: Double, unit: PressureUnit): Pressure =
+    @JvmStatic
+    fun of(value: Double = 0.0, unit: PressureUnit = PressureUnit.PASCAL): Pressure =
         Pressure(value * unit.factor)
 
-    @JvmStatic fun parse(str: String): Pressure {
-      if (str.isBlank())
+    @JvmStatic
+    fun parse(str: String): Pressure {
+      if (str.isNullOrBlank())
         return ZERO
 
       try {
-        val (p, u) = str.split(" ", limit = 2)
-        return of(p.toDouble(), PressureUnit.parse(u))
+        val (pressure, unit) = str.split(" ", limit = 2)
+        return of(pressure.toDouble(), PressureUnit.parse(unit))
       } catch(e: Exception) {
         throw NumberFormatException("Unknown pressure format. str=$str")
       }

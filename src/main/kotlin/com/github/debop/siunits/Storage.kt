@@ -104,12 +104,12 @@ data class Storage(val bytes: Long = 0L) : Comparable<Storage>, Serializable {
 
   companion object {
 
-    val ZERO = Storage(0L)
-    val MAX_VALUE = Storage(Long.MAX_VALUE)
-    val MIN_VALUE = Storage(Long.MIN_VALUE)
+    final val ZERO = Storage(0L)
+    final val MAX_VALUE = Storage(Long.MAX_VALUE)
+    final val MIN_VALUE = Storage(Long.MIN_VALUE)
 
     @JvmStatic
-    fun of(value: Double, unit: StorageUnit = StorageUnit.BYTE): Storage =
+    fun of(value: Double = 0.0, unit: StorageUnit = StorageUnit.BYTE): Storage =
         Storage((value * unit.factor).toLong())
 
     @JvmStatic
@@ -118,8 +118,8 @@ data class Storage(val bytes: Long = 0L) : Comparable<Storage>, Serializable {
         return Storage.ZERO
 
       try {
-        val (v, u) = storageStr.split(" ", limit = 2)
-        return of(v.toDouble(), StorageUnit.parse(u))
+        val (bytes, unit) = storageStr.split(" ", limit = 2)
+        return of(bytes.toDouble(), StorageUnit.parse(unit))
 
       } catch(e: Exception) {
         throw NumberFormatException("Invalid Storage string. storageStr=$storageStr")

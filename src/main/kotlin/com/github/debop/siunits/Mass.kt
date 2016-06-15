@@ -38,7 +38,7 @@ enum class MassUnit(val unitName: String, val factor: Double) {
         lower = lower.dropLast(1)
       }
       return MassUnit.values().find { it.unitName == lower }
-          ?: throw NumberFormatException("Unknown Mess unit. unit=$unitStr")
+             ?: throw NumberFormatException("Unknown Mess unit. unit=$unitStr")
     }
   }
 }
@@ -101,27 +101,28 @@ data class Mass(val gram: Double = 0.0) : Comparable<Mass>, Serializable {
 
 //    private val log = LoggerFactory.getLogger(MassUnit::class.java)
 
-    val ZERO: Mass = Mass(0.0)
-    val MAX_VALUE = Mass(Double.MAX_VALUE)
-    val MIN_VALUE = Mass(Double.MIN_VALUE)
-    val POSITIVE_INF: Mass = Mass(Double.POSITIVE_INFINITY)
-    val NEGATIVE_INF: Mass = Mass(Double.NEGATIVE_INFINITY)
-    val NaN: Mass = Mass(Double.NaN)
+    final val ZERO: Mass = Mass(0.0)
+    final val MAX_VALUE = Mass(Double.MAX_VALUE)
+    final val MIN_VALUE = Mass(Double.MIN_VALUE)
+    final val POSITIVE_INF: Mass = Mass(Double.POSITIVE_INFINITY)
+    final val NEGATIVE_INF: Mass = Mass(Double.NEGATIVE_INFINITY)
+    final val NaN: Mass = Mass(Double.NaN)
 
     /**
      * Static constructor
      */
     @JvmStatic
-    fun of(value: Double, unit: MassUnit = MassUnit.GRAM): Mass = Mass(value * unit.factor)
+    fun of(value: Double = 0.0, unit: MassUnit = MassUnit.GRAM): Mass =
+        Mass(value * unit.factor)
 
     @JvmStatic
     fun parse(str: String): Mass {
-      if (str.isBlank())
+      if (str.isNullOrBlank())
         return Mass.ZERO
 
       try {
-        val (v, u) = str.trim().split(" ", limit = 2)
-        return of(v.toDouble(), MassUnit.parse(u))
+        val (value, unit) = str.trim().split(" ", limit = 2)
+        return of(value.toDouble(), MassUnit.parse(unit))
 
       } catch(e: Exception) {
         throw NumberFormatException("Invalid Mass string. str=$str")

@@ -47,19 +47,29 @@ data class Temperature(val kelvin: Double = 0.0) : Comparable<Temperature>, Seri
   override fun toString(): String = "%.1f %s".format(kelvin, TemperatureUnit.KELVIN.unitName)
 
   companion object {
-    val ZERO = Temperature(0.0)
-    val MIN_VALUE = Temperature(Double.MIN_VALUE)
-    val MAX_VALUE = Temperature(Double.MAX_VALUE)
-    val POSITIVE_INF = Temperature(Double.POSITIVE_INFINITY)
-    val NEGATIVE_INF = Temperature(Double.NEGATIVE_INFINITY)
-    val NaN = Temperature(Double.NaN)
+    final val ZERO = Temperature(0.0)
+    final val MIN_VALUE = Temperature(Double.MIN_VALUE)
+    final val MAX_VALUE = Temperature(Double.MAX_VALUE)
+    final val POSITIVE_INF = Temperature(Double.POSITIVE_INFINITY)
+    final val NEGATIVE_INF = Temperature(Double.NEGATIVE_INFINITY)
+    final val NaN = Temperature(Double.NaN)
 
     @JvmStatic
     fun of(temp: Double, unit: TemperatureUnit = TemperatureUnit.KELVIN): Temperature =
         Temperature(temp + unit.factor)
 
     @JvmStatic
-    fun parse(tempStr: String): Temperature = TODO()
+    fun parse(tempStr: String): Temperature {
+      if (tempStr.isNullOrBlank())
+        return ZERO
+
+      try {
+        val (temp, unit) = tempStr.split(" ", limit = 2)
+        return of(temp.toDouble(), TemperatureUnit.parse(unit))
+      } catch(e: Exception) {
+        throw NumberFormatException("Unknown Temperature string. tempStr=$tempStr")
+      }
+    }
   }
 
 }
