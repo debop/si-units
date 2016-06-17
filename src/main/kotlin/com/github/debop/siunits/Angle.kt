@@ -6,11 +6,13 @@ import java.io.Serializable
 
 
 const val DEGREE_FORMAT = "%.1f deg"
-const val RADIAN_FORMAT = "%.1f rad"
+const val RADIAN_FORMAT = "%.4f rad"
 
+fun radToDeg(rad: Double): Double = rad * 180.0 / Math.PI
+fun degToRad(degree: Double): Double = degree * Math.PI / 180.0
 
-fun Double.toRadian(): Double = this * Math.PI / 180.0
-fun Double.toDegree(): Double = this * 180.0 / Math.PI
+fun Double.toRadian(): Angle = Angle(radToDeg(this))
+fun Double.toDegree(): Angle = Angle(this)
 
 /**
  * 각도 단위 종류
@@ -40,7 +42,7 @@ enum class AngleUnit(val unitName: String) {
 data class Angle(val degree: Double = 0.0) : Comparable<Angle>, Serializable {
 
   fun inDegree(): Double = this.degree
-  fun inRadian(): Double = this.degree.toRadian()
+  fun inRadian(): Double = degToRad(this.degree)
 
   fun in360() = Angle(degree % 360.0)
 
@@ -54,13 +56,13 @@ data class Angle(val degree: Double = 0.0) : Comparable<Angle>, Serializable {
 
   operator fun unaryMinus(): Angle = Angle(-degree)
 
-  fun toHuman(unit: AngleUnit): String = when (unit) {
-    AngleUnit.Degree -> "%.1f deg".format(inDegree())
-    AngleUnit.Radian -> "%.1f red".format(inRadian())
+  fun toHuman(unit: AngleUnit = AngleUnit.Degree): String = when (unit) {
+    AngleUnit.Degree -> DEGREE_FORMAT.format(inDegree())
+    AngleUnit.Radian -> RADIAN_FORMAT.format(inRadian())
   }
 
   override fun compareTo(other: Angle): Int = degree.compareTo(other.degree)
-  override fun toString(): String = "%.1f %s".format(degree, AngleUnit.Degree.unitName)
+  override fun toString(): String = "%.4f %s".format(degree, AngleUnit.Degree.unitName)
 
   companion object {
 
@@ -89,7 +91,7 @@ data class Angle(val degree: Double = 0.0) : Comparable<Angle>, Serializable {
     fun degree(angle: Double) = Angle(angle)
 
     @JvmStatic
-    fun radian(angle: Double) = Angle(angle.toDegree())
+    fun radian(angle: Double) = Angle(radToDeg(angle))
 
     @JvmStatic
     fun parse(str: String): Angle {

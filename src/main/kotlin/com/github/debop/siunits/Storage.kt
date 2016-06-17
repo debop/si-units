@@ -4,6 +4,14 @@ package com.github.debop.siunits
 
 import java.io.Serializable
 
+fun Int.toBytes(): Storage = Storage(this.toLong())
+fun Int.toKBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.KBYTE)
+fun Int.toMBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.MBYTE)
+fun Int.toGBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.GBYTE)
+fun Int.toTBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.TBYTE)
+fun Int.toPBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.PBYTE)
+fun Int.toXBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.XBYTE)
+
 
 fun Long.toBytes(): Storage = Storage(this)
 fun Long.toKBytes(): Storage = Storage.of(this.toDouble(), StorageUnit.KBYTE)
@@ -87,12 +95,15 @@ data class Storage(val bytes: Long = 0L) : Comparable<Storage>, Serializable {
     var display = Math.abs(bytes)
     var order = 0
 
-    while (display > 1126.0) {
+    while (display >= 1024.0) {
       order++
       display /= StorageUnit.KBYTE.factor
     }
 
-    return "%.1f %s".format(Math.signum(bytes.toDouble()) * display, StorageUnit.values()[order].unitName)
+    return if (order == 0)
+      "%f %s".format(bytes, StorageUnit.BYTE.unitName)
+    else
+      "%.1f %s".format(Math.signum(bytes.toDouble()) * display, StorageUnit.values()[order].unitName)
   }
 
   companion object {

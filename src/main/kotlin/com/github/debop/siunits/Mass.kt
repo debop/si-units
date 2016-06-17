@@ -9,15 +9,15 @@ const val GRAM_IN_GRAM: Double = 1.0
 const val KILOGRAM_IN_GRAM: Double = 1000.0
 const val TON_IN_GRAM: Double = 1000.0 * 1000.0
 
-fun Int.milligram(): Mass = Mass.of(this.toDouble(), MassUnit.MILLIGRAM)
-fun Int.gram(): Mass = Mass.of(this.toDouble(), MassUnit.GRAM)
-fun Int.kilogram(): Mass = Mass.of(this.toDouble(), MassUnit.KILOGRAM)
-fun Int.ton(): Mass = Mass.of(this.toDouble(), MassUnit.TON)
+fun Int.toMilligram(): Mass = Mass.of(this.toDouble(), MassUnit.MILLIGRAM)
+fun Int.toGram(): Mass = Mass.of(this.toDouble(), MassUnit.GRAM)
+fun Int.toKilogram(): Mass = Mass.of(this.toDouble(), MassUnit.KILOGRAM)
+fun Int.toTon(): Mass = Mass.of(this.toDouble(), MassUnit.TON)
 
-fun Double.milligram(): Mass = Mass.of(this, MassUnit.MILLIGRAM)
-fun Double.gram(): Mass = Mass.of(this, MassUnit.GRAM)
-fun Double.kilogram(): Mass = Mass.of(this, MassUnit.KILOGRAM)
-fun Double.ton(): Mass = Mass.of(this, MassUnit.TON)
+fun Double.toMilligram(): Mass = Mass.of(this, MassUnit.MILLIGRAM)
+fun Double.toGram(): Mass = Mass.of(this, MassUnit.GRAM)
+fun Double.toKilogram(): Mass = Mass.of(this, MassUnit.KILOGRAM)
+fun Double.toTon(): Mass = Mass.of(this, MassUnit.TON)
 
 /**
  * 질량/무게 (Mass/Weight) 단위를 표현합니다.
