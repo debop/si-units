@@ -19,8 +19,9 @@ public class StorageTest extends AbstractUnitTest {
     assertThat(toMBytes(1).inMBytes()).isEqualTo(1);
     assertThat(toGBytes(1).inGBytes()).isEqualTo(1);
 
+    assertThat(toBytes(1).inKBytes()).isEqualTo(1.0 / 1024.0);
     assertThat(toBytes(1 << 10).inKBytes()).isEqualTo(1);
-    assertThat(toBytes(1.0).inKBytes()).isEqualTo(0L);
+    assertThat(toBytes(1 << 20).inKBytes()).isEqualTo(1024);
     assertThat(toKBytes(1).inBytes()).isEqualTo(1L << 10);
     assertThat(toMBytes(1).inBytes()).isEqualTo(1L << 20);
     assertThat(toGBytes(1).inBytes()).isEqualTo(1L << 30);
