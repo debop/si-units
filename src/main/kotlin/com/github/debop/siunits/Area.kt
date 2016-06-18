@@ -75,8 +75,10 @@ data class Area(val m2: Double = 0.0) : Comparable<Area>, Serializable {
   override fun compareTo(other: Area): Int = m2.compareTo(other.m2)
   override fun toString() = "%.1f %s".format(m2, AreaUnit.METER_2.unitName)
 
-  // Meter 법만으로 표현
-  fun toHuman(unit: AreaUnit = AreaUnit.METER_2): String = TODO()
+  fun toHuman(unit: AreaUnit = AreaUnit.METER_2): String {
+    val displayUnit = AreaUnit.values().first { m2 * it.factor > 1.0 }
+    return "%.1f %s".format(m2 * displayUnit.factor, displayUnit.unitName)
+  }
 
   companion object {
     val ZERO = Area(0.0)
